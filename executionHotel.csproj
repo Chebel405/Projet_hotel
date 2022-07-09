@@ -1,0 +1,296 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+</Project>
+
+
+
+using System;
+
+
+namespace Banque
+{
+    class Banque
+    {
+        static void Main(string[] args)
+        {
+            int cptCLient = 0;
+			int i;
+            string id;
+            (string id, string nom, string prenom, DateTime? dateNaissance, string email)[]clients = new (string, string, string, DateTime?, string)[0];
+            while (true)
+            {
+             
+                Console.WriteLine("1 - Créer un client.\n");
+                Console.WriteLine("2 - Modifier une personne. Modifier une agence\n");
+                Console.WriteLine("3 - Supprimer une personne.Supprimer un client\n");
+				Console.WriteLine("4   Supprimer une agence \n");
+                Console.WriteLine("4 - Afficher toutes les personnes.\n"); 
+                Console.WriteLine("\t5Afficher la liste des comptes d'un client(id client) \n");
+                Console.WriteLine("\t6/ Modifier un client\n");
+                Console.WriteLine("\t7/ Créer un compte bancaire \n");
+				Console.WriteLine("\t8/ Supprimer un compte bancaire \n");
+				Console.WriteLine("\t9/ Modifier un compte bancaire\n");
+				Console.WriteLine("\t10/Recherche de compte (numéro de compte)\n");
+				Console.WriteLine("\t11/Recherche de client(Nom, Numéro de compte, id du client\n");
+				Console.WriteLine("\t13/Imprimer les infos client(id client)\n");
+                Console.WriteLine("14- Quitter.");
+                Console.Write(" Choix : ");
+                string choix = Console.ReadLine();
+                switch (choix)
+                {
+                    case "1": //Créer une personne
+                        (string id, string nom, string prenom, DateTime dateNaissance, string email) newCLient;
+						newClient.id = "AB" + (++cptClient).ToString().PadLeft(6).Replace(" ", "0");
+                        Console.Write("Nom ?:");
+                        newClient.nom = Console.ReadLine();
+                        Console.Write("Prenom ?:");
+                        newCLient.prenom = Console.ReadLine();
+                        Console.Write("Date naissance (dd/mm/aaaa) ?:");
+                        newClient.dateNaissance = DateTime.Parse(Console.ReadLine());
+                        Console.Write("Email ?:");
+                        newClient.email = Console.ReadLine(); Array.Resize(ref clients, clients.Length + 1); clients[clients.Length - 1] = newClient; break;
+						
+                    case "2": // Modifier une personne - agence
+                        (string id, string nom, string prenom, DateTime? dateNaissance, string email) newClient2; 
+						Console.Write("Quelle id ?:");
+                        newClient2.id = Console.ReadLine(); 
+						var oldClientTmp = ChercherClientParId(clients, newClient2.id);
+						if (oldClientTmp != null)
+                        {
+                            (string id, string nom, string prenom, DateTime? dateNaissance, string email) oldClient;
+                            oldClient= oldClientTmp ?? (newClient2.id, "", "", null, "");
+                            Console.Write("Nom (Default : {0})?:", oldClient.nom);
+                            newClient2.nom = Console.ReadLine();
+                            if (newClient2.nom.Trim() == "")
+                            {
+                                newClient2.nom = oldClient.nom;
+                            }
+                            Console.Write("Prenom (Default : {0})?:", oldClient.prenom);
+                            newClient2.prenom = Console.ReadLine();
+                            if (newClient2.prenom.Trim() == "")
+                            {
+                                newClient2.prenom = oldClient.prenom;
+                            }
+                            Console.Write("Date naissance (dd/mm/aaaa) (Default : {0})?:", oldClient.dateNaissance);
+                            String dateNaissanceStr = Console.ReadLine();
+                            if (dateNaissanceStr.Trim() == "")
+                            {
+                                newClient2.dateNaissance = oldClient.dateNaissance;
+                            }
+                            else
+                            {
+                                newClient2.dateNaissance = DateTime.Parse(dateNaissanceStr);
+                            }
+                            Console.Write("Email (Default : {0})?:", oldClient.email);
+                            newClient2.email = Console.ReadLine();
+							if (newClient2.email.Trim() == "")
+                            {
+                                newClient2.email = oldClient.email;
+                            }
+                            for (i = 0; i < clients.Length; i++)
+                            {
+                                if (clients[i].id == newClient2.id)
+                                {
+                                    clients[i].nom = newClient2.nom;
+                                    clients[i].prenom = newClient2.prenom;
+                                    clients[i].dateNaissance = newClient2.dateNaissance;
+                                    clients[i].email = newClient2.email;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Le client dont l'id est {0} n'existe pas.", newClient2.id);
+                        }
+                        break;
+						
+                    case "3": //Supprimer une personne
+                        i = 0;
+						Console.WriteLine("Quelle id ?:");
+                        id = Console.ReadLine();
+                        do
+                        {
+                            if (clients[i].id == id)
+                            {
+                                //Console.WriteLine("AAAAAAAA personnes[i].id == id");
+                                clients[i].nom = null;
+                                clients[i].prenom = null;
+                                clients[i].dateNaissance = null;
+                                clients[i].email = null;
+                                i--;
+                            }
+                            i++;
+                            
+                        } while (i < clients.Length - 1 && clients[i].id != id);
+              
+                        int xwkh = i;
+                        if (clients.Length == 1)
+                        {  
+                            clients[i].nom = null;
+                            clients[i].prenom = null;
+                            clients[i].dateNaissance = null;
+                            clients[i].email = null;
+                        }
+                        if (clients[i].id == id && clients.Length > 1)
+                        {
+                            for (i = xwkh; i < clients.Length - 2; i++)
+                            {
+                                clients[i].nom = clients[i + 1].nom;
+                                clients[i].prenom = clients[i + 1].prenom;
+                                clients[i].dateNaissance = clients[i + 1].dateNaissance;
+                                clients[i].email = clients[i + 1].email;
+                            }
+                            clients[i + 1].nom = null;
+                            clients[i + 1].prenom = null;
+                            clients[i + 1].dateNaissance = null;
+                            clients[i + 1].email = null;
+                        }
+                        else if (clients.Length > 1)
+                        {
+                            Console.WriteLine("Erreur : cette personne n'existe pas.");
+                        }
+                        break;
+						
+                    case "4"://Afficher toutes les personnes
+				
+						i = 0;
+                        Console.Write("Id".PadRight("Date naissance".Length));
+                        Console.Write("Nom".PadRight("Date naissance".Length));
+                        Console.Write("Date naissance ");
+                        Console.WriteLine("Email".PadRight("Date naissance".Length));
+                        for (i = 1; i <= clients.Length; i++)
+                        {
+
+                           Console.Write(clients[i].id.PadRight("Date naissance".Length));
+                           Console.Write(clients[i].nom.PadRight("Date naissance".Length));
+                           Console.Write(clients[i].prenom.PadRight("Date naissance".Length));
+                           Console.Write(clients[i].dateNaissance);
+                           Console.WriteLine(clients[i].email.PadRight("Date naissance".Length));
+                        }
+                        break;
+						
+                   
+
+                    case "6": // Recherche de compte (numéros de compte)
+                        id = 0;
+                        int numeroComptes;
+						numeroComptes = int.Parse(Console.ReadLine());
+
+						Console.Write("Entrez le numéro de compte :");
+						
+							foreach(int numeroComptes in compte)
+							{
+							
+								if ( id == clients[i].id)
+								{
+										Console.WriteLine("Le numéro " + numeroComptes);
+								}
+							}
+
+                       
+					
+					case "7":     //Recherche de client (Nom, Numéro de compte, id du client)
+					
+						int numeroComptes;
+						numeroComptes = int.Parse(Console.ReadLine());
+						// string compteToCLient;
+						// compteToClient = string.Parse(Console.ReadLine());
+						// string idCompte;
+						// idCompte = string.Parse(Console.ReadLine());
+						
+
+							
+							Console.Write("Veuillez inscrire le nom du client:");
+							String ligne = Console.ReadLine();
+							
+				foreach ((int id, string nom, int numeroComptes)numeroComptes in target )
+							{
+								if (id == target[i].id )
+								{
+									Console.WriteLine("Les informations de se compte sont :");
+									Console.WriteLine(" id du client :" + id);
+									Console.WriteLine(" -Nom du client :" + nom);
+									Console.WriteLine(" -Compte du client :" + numeroComptes);
+									return clients[i];
+									
+								}
+			 
+							}
+				
+
+				foreach ((int id, string nom, int numeroComptes)noms in target)
+							{
+								if (nom == clients[i].nom)
+								{
+									Console.WriteLine("Les informations de se compte sont :");
+									Console.WriteLine(" id du client :" + clients[i].id);
+									Console.WriteLine(" -Nom du client :" + clients[i].nom);
+									Console.WriteLine(" -Numéros de Compte :" + clients[i].numeroComptes);
+									return clients[i];
+									
+								}
+							}
+
+
+				foreach ((int id, string nom, int numeroComptes)clients in target)
+							{
+								if (numeroComptes == clients[i].numeroComptes)
+								{
+									Console.WriteLine("Les informations de se compte sont :");
+									Console.WriteLine(" id du client :" + clients[i].id);
+									Console.WriteLine(" -Nom du client :" + clients[i].nom);
+									Console.WriteLine(" -Numéros de Compte :" + clients[i].numeroComptes);
+									return clients[i];
+								}
+							}
+						
+						
+	
+					 case "8"://Quitter
+                        Environment.Exit(0);
+                        break;
+                    default: break;
+
+                            
+                            
+                       
+
+                }
+            }
+        }
+        public static (string id, string nom, string prenom, DateTime? dateNaissance, string email)? ChercherClientParId((string id, string nom, string prenom, DateTime? dateNaissance, string email)[]clients, string id)
+        {
+            int i;
+            for (i = 0; i < clients.Length; i++)
+            {
+                if (clients[i].id == id)
+                {
+                    return clients[i];
+                }
+            }
+            return null;
+        }
+		
+    }	
+		
+}
+
+
+				
+			
+		
+	
+	
+/*}*/
+
+				
+                
+   
+				
+				
+				
